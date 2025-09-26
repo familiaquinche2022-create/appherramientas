@@ -36,8 +36,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-2 mb-4">
-              <Wrench className="h-10 w-10 text-blue-600" />
-              <Package className="h-8 w-8 text-blue-500" />
+              <img 
+                src="https://ecuajugos.com/wp-content/uploads/2019/06/ecuajugos-color@2xv1.png" 
+                alt="Ecuajugos Logo" 
+                className="h-16 w-auto"
+              />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Control de Herramientas
@@ -52,7 +55,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             <p className="text-sm text-blue-800 mb-2 font-medium">Credenciales de prueba:</p>
             <div className="text-sm text-blue-700 space-y-1">
               <p><strong>Admin:</strong> admin@ecuajugos.com / admin123</p>
-              <p><strong>Operario:</strong> operario@ecuajugos.com / operario123</p>
             </div>
           </div>
 
@@ -121,7 +123,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 
           <div className="mt-8 text-center">
             <p className="text-xs text-gray-500">
-              © 2025 Ecuajugos S.A. - Todos los derechos reservados
+              © 2025 Ecuajugos S.A. - Desarrollado por Dennis Quinche
             </p>
           </div>
         </div>

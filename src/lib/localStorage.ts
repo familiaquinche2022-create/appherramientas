@@ -106,7 +106,6 @@ export const signIn = async (email: string, password: string) => {
   // Simple authentication - in production you'd want proper password hashing
   const validCredentials = [
     { email: 'admin@ecuajugos.com', password: 'admin123' },
-    { email: 'operario@ecuajugos.com', password: 'operario123' },
   ];
 
   const isValid = validCredentials.some(cred => cred.email === email && cred.password === password);

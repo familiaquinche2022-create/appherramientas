@@ -18,6 +18,13 @@ function App() {
   const { movements, loading: movementsLoading, createCheckout, createCheckin } = useMovements();
   const [activeTab, setActiveTab] = useState('dashboard');
 
+  // Force re-render when user changes
+  const [, forceUpdate] = useState({});
+  
+  const handleAuthSuccess = () => {
+    forceUpdate({});
+  };
+
   // Calculate dashboard stats
   const stats: DashboardStats = useMemo(() => {
     const totalTools = tools.length;
@@ -57,7 +64,7 @@ function App() {
   }
 
   if (!user) {
-    return <LoginForm onSuccess={() => {}} />;
+    return <LoginForm onSuccess={handleAuthSuccess} />;
   }
 
   const loading = toolsLoading || movementsLoading;

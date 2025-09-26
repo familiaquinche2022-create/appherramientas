@@ -20,8 +20,11 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut }) => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
-              <Wrench className="h-8 w-8 text-blue-600" />
-              <Package className="h-6 w-6 text-blue-500" />
+              <img 
+                src="https://ecuajugos.com/wp-content/uploads/2019/06/ecuajugos-color@2xv1.png" 
+                alt="Ecuajugos Logo" 
+                className="h-10 w-auto"
+              />
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">
@@ -34,6 +37,9 @@ export const Header: React.FC<HeaderProps> = ({ user, onSignOut }) => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <div className="text-xs text-gray-400 hidden sm:block">
+              Desarrollado por Dennis Quinche
+            </div>
             <div className="flex items-center space-x-2">
               <User className="h-5 w-5 text-gray-400" />
               <div className="text-right">

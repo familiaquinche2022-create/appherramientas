@@ -11,6 +11,18 @@ export const useAuth = () => {
     const currentUser = getCurrentUser();
     setUser(currentUser);
     setLoading(false);
+    
+    // Listen for storage changes (for login/logout)
+    const handleStorageChange = () => {
+      const updatedUser = getCurrentUser();
+      setUser(updatedUser);
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const refetch = () => {

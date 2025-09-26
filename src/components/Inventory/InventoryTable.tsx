@@ -210,7 +210,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                           Sin Stock
                         </span>
-                      ) : tool.available_stock <= 2 ? (
+                      ) : tool.available_stock <= 0 ? (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                           Stock Bajo
                         </span>

@@ -162,7 +162,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             
             {lowStockTools.length > 0 && (
               <div>
-                <h4 className="font-medium text-orange-800 mb-2">Stock Bajo (≤ 2 unidades)</h4>
+                <h4 className="font-medium text-orange-800 mb-2">Stock Bajo (≤ 0 unidades)</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {lowStockTools.map((tool) => (
                     <div key={tool.id} className="p-3 bg-orange-50 border border-orange-200 rounded-lg">

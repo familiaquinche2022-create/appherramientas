@@ -1,7 +1,7 @@
 import React from 'react';
 import { LogOut, Settings, User, Package, Wrench } from 'lucide-react';
 import { User as UserType } from '../../types';
-import { signOut } from '../../lib/supabase';
+import { signOut } from '../../lib/localStorage';
 
 interface HeaderProps {
   user: UserType;

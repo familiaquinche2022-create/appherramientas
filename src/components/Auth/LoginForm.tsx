@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LogIn, Wrench, Package, Eye, EyeOff } from 'lucide-react';
-import { signIn } from '../../lib/supabase';
+import { signIn } from '../../lib/localStorage';
 
 interface LoginFormProps {
   onSuccess: () => void;

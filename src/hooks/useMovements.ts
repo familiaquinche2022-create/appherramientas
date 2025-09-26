@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Movement } from '../types';
-import { supabase } from '../lib/supabase';
+import { getMovements, addMovement, updateMovement, getTools, saveTools } from '../lib/localStorage';
 
 export const useMovements = () => {
   const [movements, setMovements] = useState<Movement[]>([]);
@@ -8,19 +8,8 @@ export const useMovements = () => {
 
   const fetchMovements = async () => {
     try {
-      if (!supabase) {
-        console.warn('Supabase not configured - using empty movements list');
-        setMovements([]);
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from('movements')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setMovements(data || []);
+      const data = getMovements().sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      setMovements(data);
     } catch (error) {
       console.error('Error fetching movements:', error);
       setMovements([]);
@@ -38,44 +27,30 @@ export const useMovements = () => {
     notes?: string
   ) => {
     try {
-      if (!supabase) {
-        return { data: null, error: new Error('Supabase not configured') };
-      }
-
-      // First, update tool stock
-      const { data: tool } = await supabase
-        .from('tools')
-        .select('available_stock')
-        .eq('id', toolId)
-        .single();
+      const tools = getTools();
+      const tool = tools.find(t => t.id === toolId);
 
       if (!tool || tool.available_stock < quantity) {
         throw new Error('Stock insuficiente');
       }
 
-      const { data, error } = await supabase
-        .from('movements')
-        .insert([{
-          tool_id: toolId,
-          tool_name: toolName,
-          type: 'checkout',
-          quantity,
-          user_name: userName,
-          area,
-          notes,
-          checkout_date: new Date().toISOString(),
-          status: 'active',
-        }])
-        .select()
-        .single();
+      const { data, error } = addMovement({
+        tool_id: toolId,
+        tool_name: toolName,
+        type: 'checkout',
+        quantity,
+        user_name: userName,
+        area,
+        notes,
+        checkout_date: new Date().toISOString(),
+        status: 'active',
+      });
 
-      if (error) throw error;
-
-      // Update tool available stock
-      await supabase
-        .from('tools')
-        .update({ available_stock: tool.available_stock - quantity })
-        .eq('id', toolId);
+      if (!error) {
+        // Update tool available stock
+        tool.available_stock -= quantity;
+        saveTools(tools);
+      }
 
       await fetchMovements();
       return { data, error: null };
@@ -86,60 +61,37 @@ export const useMovements = () => {
 
   const createCheckin = async (movementId: string, returnQuantity: number, userName: string, notes?: string) => {
     try {
-      if (!supabase) {
-        return { data: null, error: new Error('Supabase not configured') };
-      }
-
-      // Get the original movement
-      const { data: movement } = await supabase
-        .from('movements')
-        .select('*')
-        .eq('id', movementId)
-        .single();
+      const movements = getMovements();
+      const movement = movements.find(m => m.id === movementId);
 
       if (!movement) throw new Error('Movimiento no encontrado');
 
       // Update the original movement
-      await supabase
-        .from('movements')
-        .update({
-          status: 'returned',
-          checkin_date: new Date().toISOString(),
-        })
-        .eq('id', movementId);
+      updateMovement(movementId, {
+        status: 'returned',
+        checkin_date: new Date().toISOString(),
+      });
 
       // Create a new checkin movement
-      const { data, error } = await supabase
-        .from('movements')
-        .insert([{
-          tool_id: movement.tool_id,
-          tool_name: movement.tool_name,
-          type: 'checkin',
-          quantity: returnQuantity,
-          user_name: userName,
-          area: movement.area,
-          notes,
-          checkout_date: movement.checkout_date,
-          checkin_date: new Date().toISOString(),
-          status: 'returned',
-        }])
-        .select()
-        .single();
-
-      if (error) throw error;
+      const { data, error } = addMovement({
+        tool_id: movement.tool_id,
+        tool_name: movement.tool_name,
+        type: 'checkin',
+        quantity: returnQuantity,
+        user_name: userName,
+        area: movement.area,
+        notes,
+        checkout_date: movement.checkout_date,
+        checkin_date: new Date().toISOString(),
+        status: 'returned',
+      });
 
       // Update tool available stock
-      const { data: tool } = await supabase
-        .from('tools')
-        .select('available_stock')
-        .eq('id', movement.tool_id)
-        .single();
-
+      const tools = getTools();
+      const tool = tools.find(t => t.id === movement.tool_id);
       if (tool) {
-        await supabase
-          .from('tools')
-          .update({ available_stock: tool.available_stock + returnQuantity })
-          .eq('id', movement.tool_id);
+        tool.available_stock += returnQuantity;
+        saveTools(tools);
       }
 
       await fetchMovements();
@@ -151,22 +103,6 @@ export const useMovements = () => {
 
   useEffect(() => {
     fetchMovements();
-
-    if (!supabase) {
-      return;
-    }
-
-    // Subscribe to real-time updates
-    const subscription = supabase
-      .channel('movements')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'movements' }, () => {
-        fetchMovements();
-      })
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
 
   return {

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Upload, Download, FileText, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Tool } from '../../types';
 import { importToolsFromExcel, exportToolsToExcel } from '../../lib/excel';
+import * as XLSX from 'xlsx';
+
 
 interface ImportExportPanelProps {
   tools: Tool[];
@@ -97,8 +99,8 @@ export const ImportExportPanel: React.FC<ImportExportPanelProps> = ({ tools, onB
       }
     ];
 
-    // Create Excel file
-    const XLSX = require('xlsx');
+    // Crear archivo Excel
+   // const XLSX = require('xlsx');
     const ws = XLSX.utils.json_to_sheet(templateData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Plantilla');

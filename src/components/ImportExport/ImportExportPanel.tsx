@@ -78,34 +78,33 @@ export const ImportExportPanel: React.FC<ImportExportPanelProps> = ({ tools, onB
   };
 
   const handleExportTemplate = () => {
-    const templateData = [
-      {
-        'Nombre': 'Taladro Eléctrico',
-        'Stock disponible': 5,
-        'Punto minimo': 1,
-        'Punto maximo': 10,
-        'Foto': 'https://ejemplo.com/imagen.jpg',
-        'Categoria': 'Herramientas Eléctricas',
-        'Descripcion': 'Taladro eléctrico de 600W'
-      },
-      {
-        'Nombre': 'Martillo',
-        'Stock disponible': 10,
-        'Punto minimo': 2,
-        'Punto maximo': 15,
-        'Foto': '',
-        'Categoria': 'Herramientas Manuales',
-        'Descripcion': 'Martillo de acero de 500g'
-      }
-    ];
+  const templateData = [
+    {
+      'Nombre': 'Taladro Eléctrico',
+      'Stock disponible': 5,
+      'Punto minimo': 1,
+      'Punto maximo': 10,
+      'Foto': 'https://ejemplo.com/imagen.jpg',
+      'Categoria': 'Herramientas Eléctricas',
+      'Descripcion': 'Taladro eléctrico de 600W'
+    },
+    {
+      'Nombre': 'Martillo',
+      'Stock disponible': 10,
+      'Punto minimo': 2,
+      'Punto maximo': 15,
+      'Foto': '',
+      'Categoria': 'Herramientas Manuales',
+      'Descripcion': 'Martillo de acero de 500g'
+    }
+  ];
 
-    // Crear archivo Excel
-   // const XLSX = require('xlsx');
-    const ws = XLSX.utils.json_to_sheet(templateData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Plantilla');
-    XLSX.writeFile(wb, 'plantilla_herramientas_ecuajugos.xlsx');
-  };
+  // Usar XLSX directamente
+  const ws = XLSX.utils.json_to_sheet(templateData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Plantilla');
+  XLSX.writeFile(wb, 'plantilla_herramientas_ecuajugos.xlsx');
+};
 
   const handleExportCurrent = () => {
     exportToolsToExcel(tools, `inventario_actual_${new Date().toISOString().split('T')[0]}`);

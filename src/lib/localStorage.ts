@@ -13,7 +13,7 @@ const initializeDefaultData = () => {
   const defaultUsers: User[] = [
     {
       id: '1',
-      email: 'admin@ecuajugos.com',
+      username: 'admin',
       name: 'Administrador',
       role: 'admin',
       area: 'Administración',
@@ -21,7 +21,7 @@ const initializeDefaultData = () => {
     },
     {
       id: '2',
-      email: 'tecnico@ecuajugos.com',
+      username: 'tecnico',
       name: 'Juan Pérez',
       role: 'operator',
       area: 'Técnico',
@@ -110,19 +110,19 @@ const initializeDefaultData = () => {
 };
 
 // User authentication
-export const signIn = async (email: string, password: string) => {
+export const signIn = async (username: string, password: string) => {
   const users = getUsers();
   
   // Simple authentication - in production you'd want proper password hashing
   const validCredentials = [
-    { email: 'admin@ecuajugos.com', password: 'admin123' },
-    { email: 'tecnico@ecuajugos.com', password: 'tecnico123' },
+    { username: 'admin', password: 'admin123' },
+    { username: 'tecnico', password: 'tecnico123' },
   ];
 
-  const isValid = validCredentials.some(cred => cred.email === email && cred.password === password);
+  const isValid = validCredentials.some(cred => cred.username === username && cred.password === password);
   
   if (isValid) {
-    const user = users.find(u => u.email === email);
+    const user = users.find(u => u.username === username);
     if (user) {
       localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
       return { data: { user }, error: null };

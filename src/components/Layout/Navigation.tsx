@@ -19,9 +19,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, 
   ];
 
   // Filter items based on user role
-  const allowedItems = navItems.filter(item => 
-    item.allowed.includes(user.role) || user.role === 'admin'
-  );
+  const allowedItems = navItems.filter(item => item.allowed.includes(user.role));
 
   return (
     <nav className="bg-white shadow-sm border-r border-gray-200">

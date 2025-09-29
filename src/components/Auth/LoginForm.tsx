@@ -7,7 +7,7 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,10 +18,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     setLoading(true);
     setError('');
 
-    const { error } = await signIn(email, password);
+    const { error } = await signIn(username, password);
     
     if (error) {
-      setError('Credenciales inválidas. Por favor, verifique su email y contraseña.');
+      setError('Credenciales inválidas. Por favor, verifique su usuario y contraseña.');
     } else {
       onSuccess();
     }
@@ -54,8 +54,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-sm text-blue-800 mb-2 font-medium">Credenciales de prueba:</p>
             <div className="text-sm text-blue-700 space-y-1">
-              <p><strong>Admin:</strong> admin@ecuajugos.com / admin123</p>
-              <p><strong>Técnico:</strong> tecnico@ecuajugos.com / tecnico123</p>
+              <p><strong>Admin:</strong> admin / admin123</p>
+              <p><strong>Técnico:</strong> tecnico / tecnico123</p>
             </div>
           </div>
 
@@ -68,16 +68,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Correo Electrónico
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                Usuario
               </label>
               <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="usuario@ecuajugos.com"
+                placeholder="Ingrese su usuario"
                 required
               />
             </div>

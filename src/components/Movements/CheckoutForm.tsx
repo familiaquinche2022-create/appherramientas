@@ -11,15 +11,22 @@ interface CheckoutFormProps {
 export const CheckoutForm: React.FC<CheckoutFormProps> = ({ tools, user, onSubmit }) => {
   const [formData, setFormData] = useState({
     toolId: '',
+    toolSearch: '',
     quantity: 1,
     userName: user.name,
     area: user.area,
     notes: '',
   });
+  const [showSearch, setShowSearch] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Filter tools that have available stock
   const availableTools = tools.filter(tool => tool.available_stock > 0);
+  
+  // Filter tools by search term
+  const searchedTools = availableTools.filter(tool => 
+    tool.name.toLowerCase().includes(formData.toolSearch.toLowerCase())
+  );
 
   const selectedTool = tools.find(t => t.id === formData.toolId);
   const maxQuantity = selectedTool?.available_stock || 0;
@@ -44,6 +51,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ tools, user, onSubmi
       setFormData({
         ...formData,
         toolId: '',
+        toolSearch: '',
         quantity: 1,
         notes: '',
       });
@@ -72,21 +80,76 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ tools, user, onSubmi
               <Package className="h-4 w-4 mr-2" />
               Herramienta *
             </label>
-            <select
-              value={formData.toolId}
-              onChange={(e) => {
-                setFormData({ ...formData, toolId: e.target.value, quantity: 1 });
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-              required
-            >
-              <option value="">Seleccione una herramienta</option>
-              {availableTools.map(tool => (
-                <option key={tool.id} value={tool.id}>
-                  {tool.name} (Disponible: {tool.available_stock})
-                </option>
-              ))}
-            </select>
+            
+            <div className="space-y-3">
+              <div className="flex space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setShowSearch(false)}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    !showSearch 
+                      ? 'bg-red-100 text-red-700 border border-red-200' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Lista
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowSearch(true)}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    showSearch 
+                      ? 'bg-red-100 text-red-700 border border-red-200' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Buscar
+                </button>
+              </div>
+              
+              {showSearch ? (
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Buscar herramienta por nombre..."
+                    value={formData.toolSearch}
+                    onChange={(e) => setFormData({ ...formData, toolSearch: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  />
+                  <select
+                    value={formData.toolId}
+                    onChange={(e) => {
+                      setFormData({ ...formData, toolId: e.target.value, quantity: 1 });
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                    required
+                  >
+                    <option value="">Seleccione una herramienta</option>
+                    {searchedTools.map(tool => (
+                      <option key={tool.id} value={tool.id}>
+                        {tool.name} (Disponible: {tool.available_stock})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <select
+                  value={formData.toolId}
+                  onChange={(e) => {
+                    setFormData({ ...formData, toolId: e.target.value, quantity: 1 });
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  required
+                >
+                  <option value="">Seleccione una herramienta</option>
+                  {availableTools.map(tool => (
+                    <option key={tool.id} value={tool.id}>
+                      {tool.name} (Disponible: {tool.available_stock})
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
           </div>
 
           {/* Quantity */}

@@ -12,6 +12,8 @@ export const EditToolModal: React.FC<EditToolModalProps> = ({ tool, onClose, onU
   const [formData, setFormData] = useState({
     name: tool.name,
     stock: tool.stock,
+    min_stock: tool.min_stock || 1,
+    max_stock: tool.max_stock || 10,
     category: tool.category || '',
     description: tool.description || '',
     photo_url: tool.photo_url || '',
@@ -98,6 +100,34 @@ export const EditToolModal: React.FC<EditToolModalProps> = ({ tool, onClose, onU
             <p className="text-sm text-gray-500 mt-1">
               Stock actual disponible: {tool.available_stock} | En uso: {tool.stock - tool.available_stock}
             </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Stock Mínimo
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={formData.min_stock}
+                onChange={(e) => setFormData({ ...formData, min_stock: parseInt(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Stock Máximo
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={formData.max_stock}
+                onChange={(e) => setFormData({ ...formData, max_stock: parseInt(e.target.value) || 1 })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
           </div>
 
           <div>

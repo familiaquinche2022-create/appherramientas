@@ -17,8 +17,19 @@ export const Dashboard: React.FC<DashboardProps> = ({
   toolsInUse, 
   recentMovements 
 }) => {
-  const lowStockTools = tools.filter(tool => tool.available_stock <= 2 && tool.available_stock > 0);
+  const lowStockTools = tools.filter(tool => {
+    const minStock = tool.min_stock || 1;
+    return tool.available_stock <= minStock && tool.available_stock > 0;
+  });
   const outOfStockTools = tools.filter(tool => tool.available_stock === 0);
+  
+  // Check for overdue tools (more than 2 days)
+  const overdueTools = toolsInUse.filter(usage => {
+    const checkoutDate = new Date(usage.checkout_date);
+    const now = new Date();
+    const diffInDays = (now.getTime() - checkoutDate.getTime()) / (1000 * 60 * 60 * 24);
+    return diffInDays > 2;
+  });
 
   return (
     <div className="space-y-6">
@@ -138,14 +149,35 @@ export const Dashboard: React.FC<DashboardProps> = ({
       </div>
 
       {/* Alerts */}
-      {(lowStockTools.length > 0 || outOfStockTools.length > 0) && (
+      {(lowStockTools.length > 0 || outOfStockTools.length > 0 || overdueTools.length > 0) && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
             <AlertTriangle className="h-5 w-5 text-red-600 mr-2" />
-            Alertas de Stock
+            Alertas del Sistema
           </h3>
           
           <div className="space-y-4">
+            {overdueTools.length > 0 && (
+              <div>
+                <h4 className="font-medium text-red-800 mb-2">Herramientas Vencidas (Más de 2 días)</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {overdueTools.map((usage, index) => (
+                    <div key={index} className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="font-medium text-red-900">{usage.tool_name}</p>
+                      <p className="text-sm text-red-600">Usuario: {usage.user_name}</p>
+                      <p className="text-sm text-red-600">Área: {usage.area}</p>
+                      <p className="text-sm text-red-600">
+                        Salida: {format(new Date(usage.checkout_date), 'dd/MM/yyyy HH:mm', { locale: es })}
+                      </p>
+                      <p className="text-sm text-red-600">
+                        Días vencido: {Math.floor((new Date().getTime() - new Date(usage.checkout_date).getTime()) / (1000 * 60 * 60 * 24))}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
             {outOfStockTools.length > 0 && (
               <div>
                 <h4 className="font-medium text-red-800 mb-2">Sin Stock</h4>
@@ -162,12 +194,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
             
             {lowStockTools.length > 0 && (
               <div>
-                <h4 className="font-medium text-orange-800 mb-2">Stock Bajo (≤ 0 unidades)</h4>
+                <h4 className="font-medium text-orange-800 mb-2">Stock Bajo</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {lowStockTools.map((tool) => (
                     <div key={tool.id} className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
                       <p className="font-medium text-orange-900">{tool.name}</p>
-                      <p className="text-sm text-orange-600">Stock: {tool.available_stock}</p>
+                      <p className="text-sm text-orange-600">
+                        Stock: {tool.available_stock} / Mínimo: {tool.min_stock || 1}
+                      </p>
                     </div>
                   ))}
                 </div>

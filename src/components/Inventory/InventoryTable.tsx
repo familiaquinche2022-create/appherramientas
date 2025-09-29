@@ -40,7 +40,8 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
   const filteredAndSortedTools = useMemo(() => {
     let filtered = tools.filter(tool => {
       const matchesSearch = tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           tool.description?.toLowerCase().includes(searchTerm.toLowerCase());
+                           tool.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           tool.category?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = !categoryFilter || (tool.category || 'Sin categoría') === categoryFilter;
       
       return matchesSearch && matchesCategory;
@@ -94,6 +95,20 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
           >
             <Plus className="h-4 w-4" />
             <span>Agregar Herramienta</span>
+          </button>
+        )}
+        
+        {user.role === 'admin' && (
+          <button
+            onClick={() => {
+              if (confirm('¿Está seguro de que desea eliminar TODAS las herramientas? Esta acción no se puede deshacer.')) {
+                tools.forEach(tool => onDeleteTool(tool.id));
+              }
+            }}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            <span>Eliminar Todo</span>
           </button>
         )}
       </div>

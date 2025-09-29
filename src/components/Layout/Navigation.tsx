@@ -18,8 +18,10 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, 
     { id: 'settings', label: 'Configuración', icon: Settings, allowed: ['admin'] },
   ];
 
-  // Only admin has access to all features
-  const allowedItems = navItems.filter(item => user.role === 'admin');
+  // Filter items based on user role
+  const allowedItems = navItems.filter(item => 
+    item.allowed.includes(user.role) || user.role === 'admin'
+  );
 
   return (
     <nav className="bg-white shadow-sm border-r border-gray-200">

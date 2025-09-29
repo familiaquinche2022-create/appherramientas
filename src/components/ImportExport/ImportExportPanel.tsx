@@ -32,6 +32,8 @@ export const ImportExportPanel: React.FC<ImportExportPanelProps> = ({ tools, onB
         name: row.Nombre || '',
         stock: row['Stock disponible'] || 0,
         available_stock: row['Stock disponible'] || 0,
+        min_stock: row['Punto minimo'] || 1,
+        max_stock: row['Punto maximo'] || 10,
         photo_url: row.Foto || undefined,
         category: row.Categoria || undefined,
         description: row.Descripcion || undefined,
@@ -78,6 +80,8 @@ export const ImportExportPanel: React.FC<ImportExportPanelProps> = ({ tools, onB
       {
         'Nombre': 'Taladro Eléctrico',
         'Stock disponible': 5,
+        'Punto minimo': 1,
+        'Punto maximo': 10,
         'Foto': 'https://ejemplo.com/imagen.jpg',
         'Categoria': 'Herramientas Eléctricas',
         'Descripcion': 'Taladro eléctrico de 600W'
@@ -85,6 +89,8 @@ export const ImportExportPanel: React.FC<ImportExportPanelProps> = ({ tools, onB
       {
         'Nombre': 'Martillo',
         'Stock disponible': 10,
+        'Punto minimo': 2,
+        'Punto maximo': 15,
         'Foto': '',
         'Categoria': 'Herramientas Manuales',
         'Descripcion': 'Martillo de acero de 500g'
@@ -126,6 +132,8 @@ export const ImportExportPanel: React.FC<ImportExportPanelProps> = ({ tools, onB
             <ul className="text-sm text-blue-800 space-y-1">
               <li>• <strong>Nombre:</strong> Nombre de la herramienta (obligatorio)</li>
               <li>• <strong>Stock disponible:</strong> Cantidad inicial (obligatorio, número mayor a 0)</li>
+              <li>• <strong>Punto minimo:</strong> Stock mínimo recomendado (opcional, por defecto 1)</li>
+              <li>• <strong>Punto maximo:</strong> Stock máximo recomendado (opcional, por defecto 10)</li>
               <li>• <strong>Foto:</strong> URL de la imagen (opcional)</li>
               <li>• <strong>Categoria:</strong> Categoría de la herramienta (opcional)</li>
               <li>• <strong>Descripcion:</strong> Descripción adicional (opcional)</li>

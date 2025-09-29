@@ -55,6 +55,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             <p className="text-sm text-blue-800 mb-2 font-medium">Credenciales de prueba:</p>
             <div className="text-sm text-blue-700 space-y-1">
               <p><strong>Admin:</strong> admin@ecuajugos.com / admin123</p>
+              <p><strong>Técnico:</strong> tecnico@ecuajugos.com / tecnico123</p>
             </div>
           </div>
 

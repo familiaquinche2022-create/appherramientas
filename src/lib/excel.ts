@@ -27,6 +27,8 @@ export const exportToolsToExcel = (tools: Tool[], filename: string = 'herramient
     'Stock Total': tool.stock,
     'Stock Disponible': tool.available_stock,
     'En Uso': tool.stock - tool.available_stock,
+    'Punto Minimo': tool.min_stock || 1,
+    'Punto Maximo': tool.max_stock || 10,
     'Categoria': tool.category || '',
     'Descripcion': tool.description || '',
     'Foto': tool.photo_url || '',

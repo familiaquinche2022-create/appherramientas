@@ -21,10 +21,10 @@ const initializeDefaultData = () => {
     },
     {
       id: '2',
-      email: 'operario@ecuajugos.com',
+      email: 'tecnico@ecuajugos.com',
       name: 'Juan Pérez',
       role: 'operator',
-      area: 'Taller Mecánico',
+      area: 'Técnico',
       created_at: new Date().toISOString(),
     },
   ];
@@ -36,6 +36,8 @@ const initializeDefaultData = () => {
       name: 'Taladro Eléctrico Bosch',
       stock: 3,
       available_stock: 3,
+      min_stock: 1,
+      max_stock: 5,
       category: 'Herramientas Eléctricas',
       description: 'Taladro eléctrico de 600W con percutor',
       photo_url: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
@@ -47,6 +49,8 @@ const initializeDefaultData = () => {
       name: 'Juego de Llaves Inglesas',
       stock: 5,
       available_stock: 5,
+      min_stock: 2,
+      max_stock: 8,
       category: 'Herramientas Manuales',
       description: 'Set de 12 llaves inglesas de 8mm a 24mm',
       photo_url: 'https://images.pexels.com/photos/209235/pexels-photo-209235.jpeg',
@@ -58,6 +62,8 @@ const initializeDefaultData = () => {
       name: 'Soldadora MIG',
       stock: 1,
       available_stock: 1,
+      min_stock: 1,
+      max_stock: 2,
       category: 'Equipos de Soldadura',
       description: 'Soldadora MIG/MAG 200A',
       photo_url: 'https://images.pexels.com/photos/1108101/pexels-photo-1108101.jpeg',
@@ -69,6 +75,8 @@ const initializeDefaultData = () => {
       name: 'Martillo de Bola',
       stock: 8,
       available_stock: 8,
+      min_stock: 3,
+      max_stock: 12,
       category: 'Herramientas Manuales',
       description: 'Martillo de bola de 500g con mango de fibra',
       created_at: new Date().toISOString(),
@@ -79,6 +87,8 @@ const initializeDefaultData = () => {
       name: 'Multímetro Digital',
       stock: 2,
       available_stock: 2,
+      min_stock: 1,
+      max_stock: 3,
       category: 'Instrumentos de Medición',
       description: 'Multímetro digital con pantalla LCD',
       created_at: new Date().toISOString(),
@@ -106,6 +116,7 @@ export const signIn = async (email: string, password: string) => {
   // Simple authentication - in production you'd want proper password hashing
   const validCredentials = [
     { email: 'admin@ecuajugos.com', password: 'admin123' },
+    { email: 'tecnico@ecuajugos.com', password: 'tecnico123' },
   ];
 
   const isValid = validCredentials.some(cred => cred.email === email && cred.password === password);

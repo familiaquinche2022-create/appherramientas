@@ -12,6 +12,8 @@ export interface Tool {
   name: string;
   stock: number;
   available_stock: number;
+  min_stock?: number;
+  max_stock?: number;
   photo_url?: string;
   category?: string;
   description?: string;
@@ -47,6 +49,8 @@ export interface ToolUsage {
 export interface ExcelRow {
   Nombre: string;
   'Stock disponible': number;
+  'Punto minimo'?: number;
+  'Punto maximo'?: number;
   Foto?: string;
   Categoria?: string;
   Descripcion?: string;
